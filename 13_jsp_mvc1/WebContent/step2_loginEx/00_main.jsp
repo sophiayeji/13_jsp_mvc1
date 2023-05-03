@@ -16,16 +16,17 @@
 		<h3>JUST DO IT!</h3>
 		<p><a href ="01_insert.jsp" > Join!</a></p>
 		
-		<p>Login!</p>
+		<p><a href="03_login.jsp">Login!</a></p>
+	
 	<%		
 		}
 	
 		else {
 	%>
 		<h3>Welcome!<%=memberId %></h3>
-		<p>Logout!</p>
-		<p>Delete!</p>
-		<p>Update!</p>
+		<p><a href="05_logout.jsp">Logout!</a></p>
+		<p><a href ="06_delete.jsp">Delete!</a></p>
+		<p><a href ="08_update.jsp" >Update!</a></p>
 	<% 		
 		}
 	%>

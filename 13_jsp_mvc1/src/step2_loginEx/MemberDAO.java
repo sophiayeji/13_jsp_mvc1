@@ -9,66 +9,154 @@ import java.sql.SQLException;
 //DAO(Data Access Object) : 데이터 접근(입출력 insert,update,delete)객체 
 public class MemberDAO {
 	
-	//SingleTon 디자인 패턴 
-	private MemberDAO() {}
-	private static MemberDAO instance = new MemberDAO();
-	public static MemberDAO getInstance() {
-		return instance;
-	}
-	
-	
-	
-	
-	private Connection conn = null;
-	private PreparedStatement pstmt = null;
-	private ResultSet rs = null;
-	
-	public void getConnection() {
-		
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");	
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/login_ex?serverTimezone=Asia/Seoul" , "root" , "1234");
-	 	} catch(Exception e) {
-	 		e.printStackTrace();
-	 	} 
-		
-	}
-	
-	public void getClose() {
-		if(rs!=null) try {rs.close();} catch (SQLException e) {e.printStackTrace();}
-		if(pstmt!=null) try {pstmt.close();} catch (SQLException e) {e.printStackTrace();}
-		if(conn!=null) try {conn.close();} catch (SQLException e) {e.printStackTrace();}
-	}
-	
-	
-	public boolean insertMember(MemberDTO memberDTO) {
-			
-		boolean isJoin = false;
-		
-		try {
-			
-			getConnection();
-			pstmt = conn.prepareStatement("SELECT*FROM MEMBER WHERE MEMBER_ID=?");
-			pstmt.setString(1, memberDTO.getMemberId());
-			rs = pstmt.executeQuery();
-			
-			if(!rs.next()) {
-				pstmt =conn.prepareStatement("INSERT INTO MEMBER VALUES(?,?,?,NOW())");
-				pstmt.setString(1,memberDTO.getMemberId());
-				pstmt.setString(2,memberDTO.getPasswd());
-				pstmt.setString(3,memberDTO.getName());
-				pstmt.executeUpdate();
-				isJoin=true;
-			}	
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			getClose();
+	// SingleTon 디자인 패턴
+		private MemberDAO() {}
+		private static MemberDAO instance = new MemberDAO();
+		public static MemberDAO getInstance() {
+			return instance;
 		}
 		
-		return isJoin;
+		private Connection conn 		= null;
+		private PreparedStatement pstmt = null;
+		private ResultSet rs 			= null;
 		
-	}
+		public void getConnection() {
+			
+			try {
+				Class.forName("com.mysql.cj.jdbc.Driver");	
+				conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/login_ex?serverTimezone=Asia/Seoul" , "root" , "1234");
+		 	} catch(Exception e) {
+		 		e.printStackTrace();
+		 	} 
+			
+		}
+		
+		public void getClose() {
+			if (rs != null)    try {rs.close();}    catch (SQLException e) {e.printStackTrace();}
+			if (pstmt != null) try {pstmt.close();} catch (SQLException e) {e.printStackTrace();}
+			if (conn != null)  try {conn.close();}  catch (SQLException e) {e.printStackTrace();}
+		}
+		
+		
+		public boolean insertMember(MemberDTO memberDTO) {
+			
+			boolean isJoin = false;
+			
+			try {
+				
+				getConnection();
+				pstmt = conn.prepareStatement("SELECT * FROM MEMBER WHERE MEMBER_ID = ?");
+				pstmt.setString(1, memberDTO.getMemberId());
+				rs = pstmt.executeQuery();
+				
+				if (!rs.next()) {
+					
+					pstmt = conn.prepareStatement("INSERTS INTO MEMBER VALUES(?,?,?,NOW())");
+					pstmt.setString(1, memberDTO.getMemberId());
+					pstmt.setString(2, memberDTO.getPasswd());
+					pstmt.setString(3, memberDTO.getName());
+					pstmt.executeUpdate();
+					isJoin = true;
+					
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				getClose();
+			}
+			
+			return isJoin;
+			
+		}
+		
+		
+		public boolean loginMember(String memberId , String passwd) {
+			
+			boolean isLogin = false;
+			
+			try {
+				
+				getConnection();
+				
+				pstmt = conn.prepareStatement("SELECT * FROM MEMBER WHERE MEMBER_ID = ? AND PASSWD = ?");
+				pstmt.setString(1, memberId);
+				pstmt.setString(2, passwd);
+				rs = pstmt.executeQuery();
+				
+				if (rs.next()) {
+					isLogin = true;
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				getClose();
+			}
+			
+			return isLogin;
+			
+		}
+		
+		public boolean deleteMember(MemberDTO memberDTO) {
+			
+			boolean isDelete =false;
+		
+			try {
+				
+				getConnection();
+				pstmt = conn.prepareStatement("SELECT * FROM MEMBER WHERE MEMBER_ID = ? AND PASSWD =?");
+				pstmt.setString(1, memberDTO.getMemberId());
+				pstmt.setString(2, memberDTO.getPasswd());
+				rs = pstmt.executeQuery();
+				
+				if(rs.next()) {
+					pstmt = conn.prepareStatement("DELETE FROM MEMBER WHERE MEMBER_ID =?");
+					pstmt.setString(1, memberDTO.getMemberId());
+					pstmt.executeUpdate();
+					isDelete=true;
+				}
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+			}finally {
+				getClose();
+			}
+			
+			
+			return isDelete;
+		}
+		
+		public boolean updateMember(MemberDTO memberDTO) {
+			
+			boolean isUpdate = false;
+			
+			try {
+				
+				getConnection();
+				pstmt = conn.prepareStatement("SELECT * FROM MEMBER WHERE MEMBER_ID = ? AND PASSWD =?");
+				pstmt.setString(1, memberDTO.getMemberId());
+				pstmt.setString(2, memberDTO.getPasswd());
+				rs = pstmt.executeQuery();
+				
+				if(rs.next()) {
+					pstmt = conn.prepareStatement("UPDATE MEMBER SET NAME =? WHERE MEMBER_ID =?");
+					pstmt.setString(1, memberDTO.getName());
+					pstmt.setString(1, memberDTO.getMemberId());
+					pstmt.executeUpdate();
+					isUpdate=true;
+				}
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+			}finally {
+				getClose();
+			}
+			
+			return isUpdate;
+			
+		}
+			
+		
 	
 }
