@@ -9,6 +9,7 @@ public class MemberDTO {
 	private String passwd;
 	private String name;
 	private Date joinDate;
+	
 	public String getMemberId() {
 		return memberId;
 	}
