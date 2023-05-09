@@ -11,7 +11,7 @@
 
 	<%
 	long boardId = Long.parseLong(request.getParameter("boardId"));
-	BoardDTO boardDTO = BoardDAO.getInstance().getBoardDetail(boardId);
+	BoardDTO boardDTO = BoardDAO.getInstance().getBoardDetail(boardId, true);
 	
 	%>
 
@@ -45,9 +45,9 @@
 		</tr>
 		<tr>
 			<td colspan="2">
-				<input type="button" value="수정하기" onclick="">
-				<input type="button" value="삭제하기" onclick="">
-				<input type="button" value="목록보기" onclick="">
+				<input type="button" value="수정하기" onclick="location.href='bUpdate.jsp?boardId=<%=boardDTO.getBoardId()%>'">
+				<input type="button" value="삭제하기" onclick="location.href='bDelete.jsp?boardId=<%=boardDTO.getBoardId()%>'">
+				<input type="button" value="목록보기" onclick="location.href='bList.jsp'">
 			</td>
 		</tr>
 	</table>
