@@ -71,7 +71,7 @@
 		}
 		
 		int currentPageNumber = Integer.parseInt(tempPageNum); 
-		int totalBoardCnt = BoardAdvanceDAO.getInstance.(searchKeyword,searchWord);
+		int totalBoardCnt = BoardAdvanceDAO.getInstance().getAllBoardCnt(searchKeyword, searchWord);
 		int startBoardIdx = (currentPageNumber -1) * onePageViewCnt;
 		ArrayList<MainBoardDTO> boardAdvanceList = BoardAdvanceDAO.getInstance().getBoardList(searchKeyword, searchWord, startBoardIdx, onePageViewCnt);
 	
